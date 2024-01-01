@@ -40,8 +40,5 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none"
-  },
-  "devDependencies": {
-    "prisma": "^5.7.1"
   }
 }

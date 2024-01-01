@@ -19,6 +19,11 @@ services:
       AUTH_SECRET: 8f896d9442bc7a1ad89990947ee67fe4de7b288ce98049b754e2d1422ae9737a
       NEXT_SHARP_PATH: /app/node_modules/sharp
     restart: always
+    depends_on:
+      - db
+    networks:
+      - app-network
+
   db:
     container_name: next-dashboard-db
     image: postgres:12
@@ -29,3 +34,12 @@ services:
       POSTGRES_DB: postgres
     ports:
       - 5432:5432
+    volumes:
+      - ./:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
