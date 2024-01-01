@@ -1,4 +1,4 @@
-import { sql } from '@vercel/postgres';
+import pool from "../lib/db"
 import { Card, Title, Text } from '@tremor/react';
 import Search from './search';
 import UsersTable from './table';
@@ -16,12 +16,28 @@ export default async function IndexPage({
   searchParams: { q: string };
 }) {
   const search = searchParams.q ?? '';
-  const result = await sql`
-    SELECT id, name, username, email 
-    FROM users 
-    WHERE name ILIKE ${'%' + search + '%'};
-  `;
-  const users = result.rows as User[];
+  let users: User[] = []; // Declare users outside of the try-catch block
+  // const result = await sql`
+  //   SELECT id, name, username, email 
+  //   FROM users 
+  //   WHERE name ILIKE ${'%' + search + '%'};
+  // `;
+  // const users = result.rows as User[];
+  const query = `
+  SELECT id, name, username, email 
+  FROM users 
+  WHERE name ILIKE $1;
+`;
+const values = ['%' + search + '%'];
+
+try {
+  const { rows } = await pool.query(query, values);
+  users = rows as User[]; // Assign value inside try block
+  
+} catch (error) {
+  console.error(error);
+  // Handle the error appropriately
+}
 
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
