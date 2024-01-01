@@ -25,6 +25,8 @@ services:
     restart: always
     depends_on:
       - db
+    volumes:
+      - ./next-app:/app # Bind mount your local next-app directory to /app in the container
     networks:
       - app-network
 

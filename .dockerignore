@@ -1,6 +1,6 @@
 Dockerfile
-dev.Dockerfile
-prod.Dockerfile
+next-app/dev.Dockerfile
+next-app/prod.Dockerfile
 .dockerignore
 node_modules
 npm-debug.log
