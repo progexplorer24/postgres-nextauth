@@ -1,18 +1,104 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/9113740/201498864-2a900c64-d88f-4ed4-b5cf-770bcb57e1f5.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/9113740/201498152-b171abb8-9225-487a-821c-6ff49ee48579.png">
-  <img alt="Shows all of the tools in the stack for this template, also listed in the README file." src="https://user-images.githubusercontent.com/9113740/201498152-b171abb8-9225-487a-821c-6ff49ee48579.png">
-</picture>
+# With Docker Compose
 
-<div align="center"><strong>Next.js 14 Admin Dashboard Template</strong></div>
-<div align="center">Built with the Next.js App Router</div>
-<br />
-<div align="center">
-<a href="http://admin-dash-template.vercel.sh/">Demo</a>
-<span> · </span>
-<a href="https://vercel.com/templates/next.js/admin-dashboard-tailwind-planetscale-react-nextjs">Clone & Deploy</a>
-<span>
-</div>
+This example contains everything needed to get a Next.js development and production environment up and running with Docker Compose.
+
+## Benefits of Docker Compose
+
+- Develop locally without Node.js or TypeScript installed ✨
+- Easy to run, consistent development environment across macOS, Windows, and Linux teams
+- Run multiple Next.js apps, databases, and other microservices in a single deployment
+- Multistage builds combined with [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) outputs up to 85% smaller apps (Approximately 110 MB compared to 1 GB with create-next-app)
+- Easy configuration with YAML files
+
+## How to use
+
+Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+
+```bash
+npx create-next-app --example with-docker-compose with-docker-compose-app
+```
+
+```bash
+yarn create next-app --example with-docker-compose with-docker-compose-app
+```
+
+```bash
+pnpm create next-app --example with-docker-compose with-docker-compose-app
+```
+
+Optionally, after the installation is complete:
+
+- Run `cd next-app`, then run `npm install` or `yarn install` or `pnpm install` to generate a lockfile.
+
+It is recommended to commit a lockfile to version control. Although the example will work without one, build errors are more likely to occur when using the latest version of all dependencies. This way, we're always using a known good configuration to develop and run in production.
+
+## Prerequisites
+
+Install [Docker Desktop](https://docs.docker.com/get-docker) for Mac, Windows, or Linux. Docker Desktop includes Docker Compose as part of the installation.
+
+## Development
+
+First, run the development server:
+
+```bash
+# Create a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+docker network create my_network
+
+# Build dev
+docker compose -f docker-compose.dev.yml build
+
+# Up dev
+docker compose -f docker-compose.dev.yml up
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+
+## Production
+
+Multistage builds are highly recommended in production. Combined with the Next [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) feature, only `node_modules` files required for production are copied into the final Docker image.
+
+First, run the production server (Final image approximately 110 MB).
+
+```bash
+# Create a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+docker network create my_network
+
+# Build prod
+docker compose -f docker-compose.prod.yml build
+
+# Up prod in detached mode
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Alternatively, run the production server without without multistage builds (Final image approximately 1 GB).
+
+```bash
+# Create a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+docker network create my_network
+
+# Build prod without multistage
+docker compose -f docker-compose.prod-without-multistage.yml build
+
+# Up prod without multistage in detached mode
+docker compose -f docker-compose.prod-without-multistage.yml up -d
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Useful commands
+
+```bash
+# Stop all running containers
+docker kill $(docker ps -aq) && docker rm $(docker ps -aq)
+
+# Free space
+docker system prune -af --volumes
+```
 
 ## Overview
 

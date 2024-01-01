@@ -5,8 +5,8 @@ services:
     container_name: next-dashboard
     image: next-dashboard
     build:
-      context: ./
-      dockerfile: Dockerfile
+      context: ./next-app
+      dockerfile: prod.Dockerfile
     ports:
       - 3000:3000
     environment:

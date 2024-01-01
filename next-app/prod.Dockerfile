@@ -25,7 +25,13 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NEXT_SHARP_PATH /app/node_modules/sharp
+
+# Environment variables must be present at build time
+# https://github.com/vercel/next.js/discussions/14030
+ARG ENV_VARIABLE
+ENV ENV_VARIABLE=${ENV_VARIABLE}
+ARG NEXT_PUBLIC_ENV_VARIABLE
+ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -66,6 +72,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
+# Environment variables must be present at build time
+# https://github.com/vercel/next.js/discussions/14030
+ARG ENV_VARIABLE
+ENV ENV_VARIABLE=${ENV_VARIABLE}
+ARG NEXT_PUBLIC_ENV_VARIABLE
+ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
+
+# Decide if this should be deleted
 EXPOSE 3000
 
 ENV PORT 3000

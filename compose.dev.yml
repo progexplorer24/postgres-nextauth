@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  frontend:
+    container_name: next-dashboard
+    image: next-dashboard
+    build:
+      context: ./next-app
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    environment:
+      POSTGRES_URL: postgresql://postgres:postgres@next-dashboard-db:5432/postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: next-dashboard-db
+      POSTGRES_DATABASE: postgres
+      NEXTAUTH_URL: http://localhost:3000
+      AUTH_SECRET: 8f896d9442bc7a1ad89990947ee67fe4de7b288ce98049b754e2d1422ae9737a
+      NEXT_SHARP_PATH: /app/node_modules/sharp
+      ENV_VARIABLE: ${ENV_VARIABLE}
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    container_name: next-dashboard-db
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
